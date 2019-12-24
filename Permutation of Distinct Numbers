@@ -1,0 +1,29 @@
+class Solution {
+public:
+    void next(vector<vector<int>> &ans,vector<int>& nums,vector<int>& current,map<int,bool> &visited)
+    {
+        if(current.size() == nums.size()) // When vector contains all numbers
+        {
+            ans.push_back(current);
+            return;
+        }
+        for(int i = 0; i<nums.size(); i++)
+        {
+            if(!visited[i]) // For Different Combinations visited order check maintained by BackTrack call
+            {
+                visited[i] = 1;
+                current.push_back(nums[i]);
+                next(ans,nums,current,visited);  // BackTrack Call
+                visited[i] = 0;                  // Mark Unvisited for BackTracking 
+                current.pop_back();              // Also Pop out so as the if-condition fails
+            }
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+        map<int,bool> visited;
+        vector<int> current;
+        next(ans,nums,current,visited); 
+        return ans;
+    }
+};
