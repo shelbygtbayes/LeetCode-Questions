@@ -1,0 +1,65 @@
+// Add Two Numbers Using Linked List
+class Solution {
+ public:
+    ListNode* add(ListNode* head,int v)
+    {
+        ListNode* n = new ListNode(v);
+        if(head==NULL) 
+        {
+            head = n;
+            return head;    
+        }
+        ListNode* temp = head;
+        while(temp->next!=NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = n; 
+        //n->next = head;
+        //head = n;
+        return head;
+    }
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        queue<int> q1;
+        queue<int> q2;
+        ListNode* h = l1;
+        while(h!=NULL)
+        {
+            q1.push(h->val);
+            h = h->next;
+        }
+        h = l2;
+        while(h!=NULL)
+        {
+            q2.push(h->val);
+            h = h->next;
+        }
+        ListNode* ans = NULL;
+        int c = 0;
+        while(!q1.empty() && !q2.empty())
+        {
+            int a = q1.front() + q2.front() + c;
+            ans = add(ans,a%10);
+            if(a>9) c = 1;
+            else c = 0;
+            q1.pop();
+            q2.pop();
+        }
+        while(!q1.empty())
+        {
+            ans = add(ans,(q1.front() + c)%10);
+            if(q1.front() + c > 9) c = 1;
+            else c = 0;
+            q1.pop();
+        }
+        while(!q2.empty())
+        {
+            ans = add(ans,(q2.front() + c)%10);
+            if(q2.front() + c > 9) c = 1;
+            else c = 0;
+            q2.pop();
+        }
+        if(c==1) ans = add(ans,1);
+        return ans;
+    }
+};
