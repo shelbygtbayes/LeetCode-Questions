@@ -1,0 +1,39 @@
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        int n1 = num1.size() , n2 = num2.size(); // Length of Given Strings
+        if(num1[0] == '0' || num2[0] == '0') return string("0"); 
+        string ans = "";
+        reverse(num1.begin(),num1.end()); // Just to start from 1st place
+        reverse(num2.begin(),num2.end());
+        int c = 0; // Carry
+        for(int i = 0; i<n1; i++)
+        {
+            int x = num1[i] - 48; // char to int
+            for(int j = 0; j<n2 ; j++)
+            {
+                int y = num2[j]-48;
+                int val = (y*x + c)%10; // Product Digit 
+                int curr_index = i+j;  
+                if(curr_index < ans.size()) // If already exists 
+                {
+                  int prev_val = ans[curr_index] - 48;
+                  ans[curr_index] = (((prev_val + val)%10)+48);
+                  c = (prev_val + y*x + c)/10;
+                }
+                else // For Every new place 
+                {
+                  ans+=(val+48);     
+                  c = (y*x + c)/10;
+                }
+            }
+            if(c) // Last Carry check
+            {
+                ans+=(c+48);     
+                c = 0;
+            }
+        }
+        reverse(ans.begin(),ans.end()); // Required format
+        return ans;
+    }
+};
