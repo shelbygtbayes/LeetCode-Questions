@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int sum = accumulate(nums.begin(),nums.end(),0);
+        if(sum%2) return false;
+        int n = nums.size();
+        int dp[sum/2 + 1][n+1];
+        if(sum==0) return true;                 // Base Case
+        for(int i=0;i<=n;i++) dp[0][i] = 1;     // Sum = 0 can be achieved by using any no of elements
+        for(int i=1;i<=sum/2;i++) dp[i][0] = 0; // Sum > 0 can't be achieved by using positive no of elements
+        for(int s = 1; s <= sum/2 ; s++)
+        {
+            for(int ind = 1; ind <= n; ind++)
+            {
+                dp[s][ind] = dp[s][ind-1];       // Initialize with sum s possible using ind-1 elements
+                if(s>=nums[ind-1])        
+                    dp[s][ind] = dp[s][ind] || dp[s-nums[ind-1]][ind-1]; // By including the nums[ind-1]
+            }
+        }
+        return dp[sum/2][n];
+    }
+};
