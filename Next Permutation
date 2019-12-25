@@ -1,0 +1,31 @@
+class Solution {
+public:
+    void func(vector<int>& nums,int pos)
+    {
+        int key = nums[pos],swap_ind = pos+1;
+        for(int i = pos+2;i<nums.size();i++)
+        {
+            if(nums[i]>key and nums[i] < nums[swap_ind])
+                swap_ind  = i;
+        }
+        swap(nums[pos],nums[swap_ind]);
+        auto it = nums.begin();
+        advance(it,pos+1);
+        sort(it,nums.end());
+    }
+    void nextPermutation(vector<int>& nums) {
+     bool check = 0;
+     for(int i = nums.size()-2;i>=0;i--)
+     {
+         if(nums[i]<nums[i+1])
+         {
+             func(nums,i); 
+             check = 1;
+             break;
+         }
+     }
+        if(!check) // If already sorted in descending order
+            sort(nums.begin(),nums.end());
+        return;
+    }
+};
