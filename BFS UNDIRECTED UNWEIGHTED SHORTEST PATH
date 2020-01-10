@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+void add_edge(map<int,vector<int> > &graph,int s,int d)
+{
+  graph[s].push_back(d);
+}
+int shortest_dist(map<int,vector<int> > adj,int dest,int n,int src)
+{
+  vector<int> dis(n,INT_MAX);
+  dis[src] = 0;
+  map<int,bool> vis;
+  if(dest == src) return 0;
+  list<int> q;
+  q.push_back(src);
+  
+  while(!q.empty())
+  {
+    int u = q.front();
+    q.pop_front();
+    for(auto v : adj[u])
+    {
+      if(!vis[v])
+      {
+        vis[v] = 1;
+        dis[v] = dis[u] + 1;
+        q.push_back(v);
+      }
+      if(v==dest) return dis[v];
+    }
+  }
+  return -1;
+}
+int main() {
+  map<int,vector<int> > graph_adj;
+  map<int,bool> vis;
+  int n = 8;
+  add_edge(graph_adj, 0, 1); 
+  add_edge(graph_adj, 0, 3); 
+  add_edge(graph_adj, 1, 2); 
+  add_edge(graph_adj, 3, 4); 
+  add_edge(graph_adj, 3, 7); 
+  add_edge(graph_adj, 4, 5); 
+  add_edge(graph_adj, 4, 6); 
+  add_edge(graph_adj, 4, 7); 
+  add_edge(graph_adj, 5, 6); 
+  add_edge(graph_adj, 6, 7); 
+  int src = 0;
+  for(int dest = 0;dest<n;dest++)
+  {
+    cout<<shortest_dist(graph_adj,dest,n,src)<<endl;
+  }
+  return 0;
+}
