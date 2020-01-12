@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int max_ans = 0 , n = s.length();
+        int st = 0 , end = 0;
+        set<char> window;
+        while(st < n and end < n)
+        {
+            if(find(window.begin(),window.end(),s[end]) == window.end()) // IF CHAR NOT FOUND IN WINDOW
+            {
+                window.insert(s[end]);
+                end++;
+                max_ans = max(end-st,max_ans);
+            }
+            else  // IF FOUND SLIDE THE WINDOW  
+            {
+                window.erase(s[st]);
+                st++;
+            }
+        }
+        return max_ans;
+    }
+};
