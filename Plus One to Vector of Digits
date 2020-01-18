@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int check , i = digits.size() - 1;
+        do
+        {
+            digits[i] = (digits[i] + 1)%10;
+            check = digits[i];
+            i--;
+        }while(!check and i>=0);
+        if(!check) 
+            digits.insert(digits.begin(),1,1);
+        return digits;
+    }
+};
