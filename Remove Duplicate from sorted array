@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) 
+    {
+        map<int,int> cnt;
+        for(auto i : nums)
+        {
+            cnt[i]++;
+        }
+        auto i = nums.begin(); 
+        while(i!=nums.end())
+        {
+            if((--cnt[*i])!=0)
+            {
+                nums.erase(i);
+            }
+            else
+                i++;
+        }
+        return nums.size();
+    }
+};
