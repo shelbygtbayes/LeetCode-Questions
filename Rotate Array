@@ -1,0 +1,20 @@
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size(),pos = 0;
+        if(k == n) return;
+        if(k>n) k = k-n;
+        stack<int> st;
+        for(int i = 0 ; i < k ; i++)
+        {
+            st.push(nums[n-i-1]);
+        }
+        while(!st.empty())
+        {
+            nums.insert(nums.begin()+pos,1,st.top());
+            nums.pop_back();
+            pos++;
+            st.pop();
+        }
+    }
+};
