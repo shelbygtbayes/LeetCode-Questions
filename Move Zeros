@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+    int cnt = 0;
+        for(auto i : nums)
+        {
+            if(i==0) cnt++;
+        }
+        auto it = nums.begin() ;
+        while( it!=nums.end())
+        {
+            if(*it == 0)
+            {
+                nums.erase(it);    
+            }
+            else
+                it++;
+        }
+        nums.insert(nums.end(),cnt,0);
+    }
+};
