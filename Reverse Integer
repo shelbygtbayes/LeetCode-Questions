@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int func(int x)
+    {
+        string y = "";
+        int len = 0;
+        bool b = false;
+        while(x!=0)
+        {
+          if(x%10 + 48 != '0' || b)
+            {
+              y += x%10 + 48;
+              b = 1;
+              len++;
+            }
+          x = x/10;
+        }
+        x = 0;
+        for(auto i : y)
+        {
+           if( x + (i-48)*pow(10,len-1) > INT_MAX )
+                return 0;
+           else
+                x += (i-48)*pow(10,len-1);
+           len--;
+        }
+        return x;
+    }
+    int reverse(int x) {
+        if(x > 0)
+        {
+            if(x >= INT_MAX) return 0;
+            else return func(x);
+        }
+        else if(x==0) return 0;
+        else
+        {
+            if(x <= INT_MIN)
+                return 0;
+            else 
+                return -func(abs(x));
+        }
+            
+    }
+};
