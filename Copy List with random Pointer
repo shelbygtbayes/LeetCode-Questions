@@ -1,0 +1,85 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+class Solution {
+public:
+    // function to create new list
+    void insert(int v , Node** head)
+    {
+        Node* temp = *head;
+        Node * n = new Node(v);
+        if(temp == NULL)
+            *head = n;
+        else
+        {
+            while(temp->next!=NULL)
+                temp = temp->next;
+            temp->next = n;
+        }
+    }
+    Node* copyRandomList(Node* head) {
+        Node * h = NULL;
+        Node * original = head;
+        //Step 1 : Copy the Linked List Data and Create a new one (Cloned)
+        while(original!=NULL)
+        {
+            insert(original->val , &h);    
+            original = original->next;
+        }
+        // Step 2 : Make random pointer of Cloned list point to the respective value node in the orignal list
+        Node * clone = h;
+        original = head;
+        while(clone!=NULL)
+        {
+            clone->random = original;
+            original =  original->next;
+            clone = clone->next;
+        }
+        // Step 3 Make next pointer of the orignal list point to the respective value node in the cloned list
+        original = head;
+        clone = h;
+        map<Node*,Node*> next_val; // To store the next pointer of the node in the original list
+        while(clone!=NULL)
+        {
+            Node * move = original->next;
+            if(original->next!=NULL) // Required in last to reset the original list
+                next_val[original] = original->next;
+            else
+                next_val[original] = NULL;
+            original->next = clone;
+            clone = clone->next;
+            original = move;
+        }
+        // Step 4 : Now set random pointer of the cloned list by using the random pointer of the the orignal list and then by-passing with the next pointer
+        clone = h;
+        original = head;
+        while(clone!=NULL)
+        {
+            if(clone->random->random!=NULL)
+                clone->random = clone->random->random->next;
+            else
+                clone->random = NULL;
+            clone = clone->next;
+        }
+        // Step 5 : Now to retrieve the original list
+        original = head;
+        while(original!=NULL)
+        {
+            original->next = next_val[original];
+            original = original->next;
+        }
+        return h;
+    }
+};
