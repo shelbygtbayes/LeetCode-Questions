@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int dx[4] = {-1,0,1,0}; // 4 directions
+    int dy[4] = {0,1,0,-1};
+    void dfs_util(vector<vector<char>>& grid,int x,int y)
+    {
+        if(x<0 || x==grid.size() || y<0 || y ==grid[x].size() || grid[x][y]=='0') return;// Terminating condition
+        grid[x][y] = '0'; // Marked
+        for(int i=0;i<4;i++)
+        {
+            int X = dx[i] + x;
+            int Y = dy[i] + y; 
+            dfs_util(grid,X,Y);
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int cnt = 0;
+        for(int row=0;row<grid.size();row++)
+        {
+            for(int col=0;j<grid[row].size();col++)
+            {
+                if(grid[row][col]=='1') 
+                {
+                    dfs_util(grid,row,col);
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+};
