@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+            map<char,int> last; // Map to store index of character ( Right most ) to check the end of partition
+            for(int i = 0;i<s.size();i++)
+                last[s[i]] = i;
+            int first_ind = 0 , st , last_ind = last[s[initial_st]];
+            vector<int> ans;
+            st = first_ind ;
+            while(st < s.size())
+            {
+                if( last[s[st]] > last_ind ) // To Enlarge the partition
+                    last_ind = last[s[st]];
+                if(st == last_ind - 1  or st == last_ind) // To build next partition
+                {
+                    ans.push_back(last_ind - first_ind  + 1);
+                    first_ind  = last_ind + 1;
+                    last_ind = last[s[first_ind]];
+                }
+                if(last_ind == s.size()-1) // Terminating condition
+                {
+                    ans.push_back(last_ind - first_ind  + 1);
+                    break;
+                }
+                st++;
+            }
+        return ans;
+    }
+};
