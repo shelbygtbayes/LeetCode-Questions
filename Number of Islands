@@ -6,7 +6,13 @@ public:
     {
         if(x<0 || x==grid.size() || y<0 || y ==grid[x].size() || grid[x][y]=='0') return;// Terminating condition
         grid[x][y] = '0'; // Marked
-        for(int i=0;i<4;i++)
+        /*
+               dfs(grid,row-1, col);
+               dfs(grid,row, col+1);
+               dfs(grid,row+1,col);
+               dfs(grid,row,col-1);
+        */
+        for(int i=0;i<4;i++)    
         {
             int X = dx[i] + x;
             int Y = dy[i] + y; 
