@@ -1,0 +1,45 @@
+class LRUCache {
+public:
+      std::unordered_map<int,int> key_val;
+      list<pair<int,int>> time;                                           // Double Linked List 
+      int max_cap , curr_cap;
+    
+    LRUCache(int capacity) {
+        curr_cap = 0;
+        max_cap = capacity;
+    }
+    
+    int get(int key) {
+        if(curr_cap == 0) return -1;                                          // Cache empty
+        if(key_val.find(key) == key_val.end()) return -1;                     // Key Doesn't exist
+        else
+        {
+            int val =  key_val[key];
+            time.remove(make_pair(key,val));
+            time.push_back(make_pair(key,val));
+            return val;
+        }
+    }
+    
+    void put(int key, int val) {
+        if(key_val.find(key) == key_val.end())        // Key Dosn't exist
+        {
+            curr_cap++;                               // Create Space 
+            key_val[key] = val;
+            time.push_back(make_pair(key,val));
+            if(curr_cap > max_cap)                    // Cache Full
+            {
+                pair<int,int> x = time.front();
+                time.pop_front();
+                key_val.erase(x.first);               // invalidate the key
+            }
+        }
+        else                                          // Key Exist
+        {
+            int prev_val = key_val[key];
+            key_val[key] = val;                       // Update the Value
+            time.remove(make_pair(key,prev_val));     // Remove the Previous key-value pair
+            time.push_back(make_pair(key,val));
+        }
+    }
+};
