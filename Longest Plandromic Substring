@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int n = s.size();
+        if(n <= 1 or (n==2 and s[0]==s[1])) return s;                               // Base Cases
+        int dp[n][n];
+        string res = s.substr(0,1);                       
+        for(int len = 0; len < n; len++)
+        {
+             for(int start = 0; start < n - len; start++)
+             {
+                int end = start + len;
+                if(start==end) dp[start][end] = 1;                           // single character             
+                else if(s[start] == s[end] and dp[start+1][end-1] == len-1) // if s[start] == s[end] and s[ start+1 .. end-1] is palindrome
+                    dp[start][end] = dp[start+1][end-1] + 2;
+                else                                                       // Not Palindrome     
+                    dp[start][end] = 0;
+                if(dp[start][end] > res.size())                           // Max length Answer
+                    res = s.substr(start,len+1);
+             }
+        }
+        return res;
+    }
+};
