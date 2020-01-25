@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int mySqrt(int x) {
+        long long st = 1 , end = x/2 + 1 , ans = -1;
+        if(x<=1) return x;
+        while(end>=st)
+        {
+            long long mid = st + (end-st)/2;
+            if((mid*mid) == x) return (int)mid;
+            else if(mid*mid < x) 
+            {
+                st = mid+1;
+                ans = mid;
+            }
+            else end = mid-1;
+        }
+        return (int)ans;
+    }
+};
+
+/*
+The above can be modified if precision (length say : l) is required as:
+int p = 0 , precision = 0.1;
+while(p<l)
+{
+  while(ans*ans <= x)                   // Equility condition never occurs since during precision process ans can't be exactly determined
+  {
+      ans+= precision
+  }
+    p++;
+    ans = ans-precision;              // Remove the last precision value
+    precision = precision/10;         // Move to higher precision
+}
+*/
