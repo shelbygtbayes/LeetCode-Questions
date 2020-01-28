@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int bs(vector<int>& nums, int target , int st , int e)                          // Simple Binary Search
+    {
+        while(st<=e)
+        {
+            int mid = st + (e-st)/2;
+            if(nums[mid] == target) return mid;
+            else if(nums[mid] > target) e = mid-1;
+            else st = mid+1;
+        }
+        return -1;
+    }
+    int rotate_point(vector<int>& nums)                                            // Rotate Point
+    {
+        int st = 0 , end = nums.size() - 1;
+        while(st<=end)
+        {
+            int mid = st + (end-st)/2;
+            if(mid+1 <= nums.size() -1  and nums[mid] > nums[mid+1]) return mid;
+            else if(nums[st] > nums[mid]) end = mid;
+            else if(nums[end] < nums[mid]) st = mid;
+            else break;
+        }
+        return -1;
+    }
+    int search(vector<int>& nums, int target) {
+        int n = nums.size();
+        if(n==1)
+        {
+            if(target == nums[0]) return 0;
+            else return -1;
+        }
+        int rotate = rotate_point(nums);
+        if(rotate == -1) return bs(nums,target,0,n-1);
+        if(nums[rotate] == target) return rotate;
+        else
+            return max(bs(nums,target,0,rotate),bs(nums,target,rotate+1,n-1));
+        
+    }
+};
