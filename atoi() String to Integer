@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int myAtoi(string str) {
+        int chr = 0 ,  n = str.size();
+        bool initial_set = false;
+        long long ans = 0;
+        while(chr < n and str[chr] == ' ') chr++;
+        if(chr == n) return 0;
+        if(str[chr] == '+' || str[chr] == '-' || (str[chr]>='0' and str[chr] <= '9'))
+        {
+            if(str[chr] == '+' || str[chr] =='-')
+            {
+                chr++;
+                initial_set = true;
+            }
+            int len = chr - 1;
+           while(chr < n and (str[chr]>='0' and str[chr] <= '9'))
+            {
+                if(10*ans + (str[chr]-'0') > INT_MAX)                                // checking ans range 
+                {
+                    if(initial_set and str[len] == '-') return INT_MIN;
+                    else return INT_MAX;
+                }
+               ans = 10*ans + (str[chr]-'0') ;
+               chr++;
+            }
+            if(initial_set)
+            {
+              switch(str[len]){
+                case '+':
+                        if(ans > INT_MAX) return INT_MAX;
+                        else return ans;
+                case '-':
+                        if(ans-1 > (INT_MAX)) return INT_MIN;
+                        else return -ans;
+            }
+            }
+            else
+            {
+                if(ans > INT_MAX) return INT_MAX;
+                else return ans;
+            }
+        }
+        else 
+            return 0;
+        return 0;                              // Illegal statements
+    }
+};
