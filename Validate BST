@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maximum(TreeNode* root)                                              // Function to find the Maximum value of the tree
+    {
+        if(root == NULL) return INT_MIN;
+        else return max(root->val , max(maximum(root->left) , maximum(root->right)));
+    }
+    int minimum(TreeNode * root)                                          // Function to find the Minimum value of the tree
+    {
+        if(root == NULL) return INT_MAX;
+        else return min(root->val , min(minimum(root->left) , minimum(root->right)));
+    }
+    bool isValidBST(TreeNode* root) {
+        if(root==NULL) return true;
+        else if(root->val == INT_MAX)    // Handling the Extreme Cases
+        {
+            if(root->right == NULL and root->val > maximum(root->left)) return isValidBST(root->left);
+            else return false;
+        }
+        else if(root->val == INT_MIN)
+        {
+            if(root->left == NULL and root->val < minimum(root->right)) return isValidBST(root->right);
+            else return false;
+        }
+        else if(root->val > maximum(root->left) and root->val < minimum(root->right))  // BST PROPERTY
+            return isValidBST(root->left) and isValidBST(root->right);
+        else return false;
+    }
+};
