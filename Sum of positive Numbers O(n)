@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+       int pivot = 0;
+       int st = -1;
+       for(int low = 0; low < nums.size() ; low++)
+       {
+           if(nums[low] < pivot)
+           {
+               st++;
+               swap(nums[st],nums[low]);
+           }
+       }
+       if(st+1 == nums.size()) 
+           return *max_element(nums.begin(),nums.end());
+        else
+        {
+            auto it = nums.begin();
+            advance(it,st+1);
+            int ans = 0;
+            while(it!=nums.end())
+            { 
+                ans += *it;
+                it++;
+            }
+            return ans;
+        }
+    }
+};
