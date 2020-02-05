@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+       int ans = INT_MIN;
+       for(int st = 0;st < nums.size() ; st++)
+       {
+          ans = max( ans , nums[i] );
+       }
+       if(ans < 0) return ans;
+       ans = INT_MIN;
+       int curr_sum = 0;
+       for(int st = 0;st < nums.size() ; st++)
+       {
+            curr_sum = curr_sum + nums[st];
+            if(curr_sum < 0 ) curr_sum = 0;
+            else if( ans < curr_sum ) ans = curr_sum;
+       }
+    }
+};
