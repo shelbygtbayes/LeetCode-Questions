@@ -1,0 +1,15 @@
+class Solution {
+public:
+    void pivoting(vector<int>& nums , int pivot) {
+       int st = -1;
+       for(int low = 0 ; low < nums.size() ; low++ )
+       {
+            if( nums[low] < pivot ) 
+            {
+                st++;
+                swap(nums[st] , nums[low]);
+            }
+       }
+       // Now st+1 is the position where the nums vector values are greater than or equal to the pivot
+    }
+};
