@@ -1,0 +1,37 @@
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int it1 = m-1;
+        int it2 = n-1;
+        if(m-1 < 0)                                                // No numbers in the Main num1 array
+        {
+            int no_of_zeros = nums1.size();
+            nums1 = nums2;
+            nums1.insert(nums1.end(),no_of_zeros-n, 0);            // Rest Zeros
+            return;
+        }
+        for(int i = m+n-1 ; i>=0 ; i--)
+        {
+            if(it2 < 0)
+            {
+                break;
+            }
+            else if(it1 < 0)                                      // Means No numbers in the Main num1 array
+            {
+                nums1[i] = nums2[it2];
+                it2--;
+                continue;
+            }
+            if(nums1[it1] > nums2[it2])
+            {
+                nums1[i] = nums1[it1];
+                it1--;
+            }
+            else
+            {
+                nums1[i] = nums2[it2];
+                it2--;
+            }
+        }
+    }
+};
