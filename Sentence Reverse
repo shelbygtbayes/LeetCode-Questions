@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#include<algorithm>
+#include<string>
+using namespace std;
+vector<char> reverseWords( const vector<char>& ar ) 
+{
+  vector<char> arr;
+  arr = ar;
+  reverse(arr.begin(),arr.end());
+  auto curr = arr.begin() , st = arr.begin();
+  while( curr != arr.end() )
+  {
+    if(*curr == ' ')
+    {
+      reverse(st , curr);
+      st = curr+1;
+    }
+    curr++;
+  }
+  reverse(st , arr.end());
+  return arr;
+}
+
+int main() {
+  string s = "My Name is Anthony";
+  vector<char> input(s.begin(),s.end());
+  vector<char> output =  reverseWords( input );
+  for(auto i : output)
+  {
+    cout << i << " ";
+  }
+  
+  return 0;
+}
