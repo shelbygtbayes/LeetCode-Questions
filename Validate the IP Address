@@ -1,0 +1,73 @@
+class Solution {
+public:
+    bool Ipv4_checker(string &ip)
+    {
+        if(ip.size() < 7 || ip.size() > 15 || (ip[0]=='.')) return false;
+        
+ 
+        int n = 0 , st = 0 , cnt = 0;
+    
+        while(st < ip.size() )
+        {
+            if(ip[st] == '.')
+            {
+                if(n < 0 or n > 255 or st+1 == ip.size() or ip[st+1] == '.') return false;
+                else
+                {
+                    n = 0;
+                    cnt++;
+                    if(cnt > 3) return false;   
+                }
+            }
+            else if(ip[st] < '0' || ip[st] > '9') return false;
+            else
+            {
+                if((ip[st] == '0') and st+1 != ip.size() && ip[st+1] != '.') return false;
+                else
+                    n = n*10 + (ip[st] - 48);
+            }
+            st++;
+        }
+        if(cnt < 3 || n < 0 or n > 255) return false;
+        return true;
+    }
+    bool Ipv6_checker(string &ip)
+    {
+        if(ip[0]==':') return false;
+        int st , sub_st;
+        st = sub_st = 0;
+        int cnt = 0;
+        while(st < ip.size())
+        {
+            if(sub_st == 4 and ip[st] != ':') return false;
+            if(ip[st] == ':') 
+            {
+                cnt++;
+                sub_st = 0;
+                if(cnt > 7 || st+1 == ip.size() || ip[st+1] == ':') return false;
+            }
+            else if((ip[st] >= '0' and ip[st] <= '9')||(ip[st] >= 'a' and ip[st] <= 'f')||(ip[st] >= 'A' and ip[st] <= 'F')) 
+                  sub_st++;
+            else return false;
+            st++;
+        }
+        if(cnt < 7) return false;
+        return true;
+    }
+    string validIPAddress(string IP) {
+            for(char c : IP)
+            {
+                if(c == '.')
+                {
+                    if(Ipv4_checker(IP)) return "IPv4";
+                    return "Neither";        
+                }
+                else if(c == ':')
+                {
+                    if(Ipv6_checker(IP)) return "IPv6";
+                    return "Neither";
+                }
+            }
+            return "Neither";
+    }
+};
