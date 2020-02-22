@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* func(int & pst , int ist , int iend , vector<int>& preorder , map<int,int> & pos)
+    {
+        if(ist > iend || pst == preorder.size()) 
+        {
+            pst--;
+            return NULL;
+        }
+        TreeNode * root = new TreeNode(preorder[pst]);
+        if(ist == iend) return root;
+        int f = pos[root->val];
+        root->left = func(++pst , ist , f - 1 , preorder , pos );
+        root->right = func(++pst , f+1 , iend , preorder , pos);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        map<int,int> m;
+        int p = 0;
+        if(preorder.size() != inorder.size() || preorder.size() == 0) return NULL;
+        for(int i = 0; i < inorder.size() ; i++)
+            m[inorder[i]] = i;
+        return func(p , 0 , inorder.size()-1 , preorder , m);
+    }
+};
