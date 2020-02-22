@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* func(int& post_index , int ist , int iend , map<int,int>& pos , vector<int>& rev_postorder)
+    {
+        if(ist > iend) 
+        {
+            post_index--;
+            return NULL;
+        }
+        TreeNode * root  = new TreeNode(rev_postorder[post_index]);
+        if(ist == iend) return root;
+        int f = pos[root->val];
+        root->right = func(++post_index , ist , f-1 , pos , rev_postorder);         // This time Right first
+        root->left = func(++post_index , f+1 , iend , pos , rev_postorder);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if(postorder.size() != inorder.size() || postorder.size() == 0) return NULL;
+        int n = postorder.size();
+        for(int i = 0 ; i < (n + 1)/2 ; i++)           // To Reverse the Vector
+        {
+            swap(postorder[i] , postorder[n-i-1]);   // Left Right Root --> Root Right Left
+            swap(inorder[i] , inorder[n-i-1]);      //  Left Root Right --> Right Root Left
+        }
+        map<int,int> pos;
+        for(int i = 0;i < inorder.size() ; i++)
+            pos[inorder[i]] = i;
+        int post_index = 0;
+        return func(post_index , 0 , n-1 , pos , postorder); // Similar_function like preorder case
+    }
+};
