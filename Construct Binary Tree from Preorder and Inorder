@@ -1,0 +1,23 @@
+class Solution 
+{
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int preorder_size = preorder.size() , inorder_size = inorder.size() ; 
+        if( preorder_size != inorder_size || preorder_size == 0) return NULL;
+        int k = 0;
+        TreeNode * root = new TreeNode(preorder[0]);
+        while(preorder[0] != inorder[k]) k++;
+        
+        vector<int> Left_preorder( preorder.begin()+1 , preorder.begin()+k+1 );
+        vector<int> Left_inorder( inorder.begin() , inorder.begin() + k );
+        
+        root->left = buildTree(Left_preorder , Left_inorder);
+        
+        vector<int> Right_preorder( preorder.begin()+k+1 , preorder.end() );
+        vector<int> Right_inorder( inorder.begin()+k+1 , inorder.end() );
+        
+        root->right = buildTree(Right_preorder , Right_inorder);
+        return root;
+    }
+};
+ 
