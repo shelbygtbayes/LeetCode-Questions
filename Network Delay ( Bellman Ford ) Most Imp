@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+        
+        int ans = -1;
+        int dis[N+1];
+        // Considering Max val as 6000
+        for(int i = 1 ; i <= N ; i++) 
+            dis[i] = 6001;
+        dis[K] = 0;
+        for(int i = 1; i <= N ; i++)    // n-1 times
+        {
+            for(auto e : times)        // Relaxing Each Edge
+            {
+                int src = e[0] , dest = e[1] , w = e[2];           // src ---w---> dest
+                if( dis[src] != 6001 and dis[dest] > dis[src] + w)
+                    dis[dest] = dis[src] + w;
+            }
+        }
+        // Finding the Max delay
+        for(int i = 1; i<=N ; i++)
+        {
+            if(dis[i] == 6001) return -1;        
+            if(i!=K) 
+                ans = max(ans,dis[i]);
+        }
+        return ans;
+    }
+};
