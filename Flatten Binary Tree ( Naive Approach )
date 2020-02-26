@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        
+        TreeNode* tr = root;
+        while(tr)
+        {
+            TreeNode* t = tr->left; 
+            TreeNode* temp = NULL;
+            while(t)
+             {
+                temp = t;
+                t = t->right;
+             }
+            if(temp)
+            {
+                temp->right = tr->right;
+                tr->right = tr->left;
+                tr->left = NULL;
+            }
+            tr = tr->right;
+        }
+    }
+};
