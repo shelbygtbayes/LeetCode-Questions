@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        // Using Stack
+        if(!root) return;
+        stack<TreeNode*> st;
+        st.push(root);
+        // Tip : If Queue is used then The below be like Level-order-Traversal
+        // Here In-place Pre-order Traversal Root Left Right
+        while(!st.empty())
+        {
+            TreeNode* t = st.top();
+            st.pop();
+            if(t->right) st.push(t->right);
+            if(t->left) st.push(t->left);
+            if(!st.empty()) t->right = st.top();
+            t->left = NULL;
+        }
+        
+    }
+};
