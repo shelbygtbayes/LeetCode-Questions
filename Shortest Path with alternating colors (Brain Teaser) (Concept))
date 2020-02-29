@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& red_edges, vector<vector<int>>& blue_edges) {
+     // Graph where each edge can have 2 colors 
+    // 0 --> red  1 --> blue
+        vector< vector< pair<int,int> > >graph(n); 
+        for(auto edge : red_edges)
+        {
+            graph[edge[0]].push_back({edge[1],0});
+        }
+        for(auto edge : blue_edges)
+        {
+            graph[edge[0]].push_back({edge[1],1});
+        }
+        // Queue for BFS
+        queue< pair<int,int> >q; // (Node,color)
+        q.push({0,0});
+        q.push({0,1});
+       
+        // Distance  src --> index  (red_cost , blue_cost) // Considering the edge color
+        vector<vector<int>> dis(n,{-1,-1});
+        dis[0] = {0,0};
+        
+        while(!q.empty())
+        {
+            auto curr_node = q.front();
+            q.pop();
+            int node = curr_node.first , color = curr_node.second;
+            for(auto next_node_edge : graph[node])
+            {
+                int next_node = next_node_edge.first , next_color = next_node_edge.second;
+                // To get the opposite color node and it's color corresponding cost
+                // Visited bool not required as we can traverse a node more than 1 time
+                if(next_color != color and dis[next_node][next_color] == -1)
+                {
+                    q.push({next_node , next_color});
+                    dis[next_node][next_color] = dis[node][color] + 1;
+                }
+            }
+        }
+        vector<int> ans; // Pick max if min_cost = -1 
+        for(int i = 0; i < n;i++)
+        {
+            ans.push_back((min(dis[i][0],dis[i][1]) == -1) ? (max(dis[i][0],dis[i][1])) : (min(dis[i][0],dis[i][1])));
+        }
+        return ans;
+    }
+};
