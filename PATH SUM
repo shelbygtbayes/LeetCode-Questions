@@ -1,0 +1,9 @@
+bool hasPathSum(TreeNode* root,int sum)
+{
+  // Check root == NULL;
+  if(!root) return false;
+  // check if root->val == sum and is leaf!
+  int new_sum = sum - root->val;
+  if(!root->left and !root->right) return new_sum == 0;
+  else return hasPathSum(root->left , new_sum) || hasPathSum(root->right , new_sum); // check for left and right sub-trees
+}
