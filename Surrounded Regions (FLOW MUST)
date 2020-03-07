@@ -1,0 +1,44 @@
+class Solution {
+public:
+    
+    void connected_o(int r,int c,vector<vector<char>>& board)
+    {
+                                                                                      // CHECK IF EXISTS
+        if(r < 0 || c < 0 || r == board.size() || c == board[0].size()) return;
+                                                                                    // IF ALREADY CONNECTED/VISITED OR 'X'
+        if(board[r][c] == '-' || board[r][c] == 'X') return;
+                                                                                  // MARK AS CONNECTED
+        board[r][c] = '-';
+                                                                                // TRAVERSE IT'S ADJACENT ( Movement )
+        connected_o(r+1,c,board);
+        connected_o(r,c+1,board);
+        connected_o(r-1,c,board);
+        connected_o(r,c-1,board);
+    }
+    void solve(vector<vector<char>>& board) {
+        int R = board.size() ; 
+        if(R == 0) return;
+        int C = board[0].size();                  // MARK THE BORDER CONNECTIONS
+                                                 // Vertical
+        for(int r = 0; r < R ; r++)
+        {
+            connected_o(r,0,board);           // First Column
+            connected_o(r,C-1,board);        //  Last  Column
+        }
+                                           // Horizontal
+        for(int c = 0; c < C ; c++)
+        {
+            connected_o(0,c,board);     // First Row
+            connected_o(R-1,c,board);  //  Last  Row
+        }
+                                     // Now Convert All Mark to 'O' and 'O' to 'X'
+        for(int r = 0; r < R ; r++)
+        {
+            for(int c = 0; c < C ; c++)
+            {
+                if(board[r][c] == '-') board[r][c] = 'O';
+                else if(board[r][c] == 'O') board[r][c] = 'X';
+            }
+        }
+    }
+};
