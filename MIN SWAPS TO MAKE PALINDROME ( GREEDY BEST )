@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+#include<string>
+using namespace std;
+int func(string s)
+{
+    bool flag = 0 /* To check the single char */, ans_ = 1 /* Check Answer Exists */;
+    int st = 0 , end = s.size()-1 , mid = end/2 , ans = 0 ;
+    map<char,int> cnt; 
+    for(auto c : s)
+    {
+        cnt[c]++;
+    }
+    while(st < end) 
+    {
+        if(s[st] == s[end])
+        {
+            st++;
+            end--;
+        }
+        else if(cnt[s[st]] == 1 and flag)                 // More than 1 single occurance characters 
+        {
+            ans_ = 0;
+            break;
+        }
+        else if(cnt[s[st]] == 1)
+        {
+            flag = 1;
+            for(int ind = st ; ind < mid ; ind++)       // Place the single character to the mid position
+            {
+                swap(s[ind],s[ind+1]);
+                ans++;
+            }
+        }
+        else
+        {
+            int ind;
+            for(ind = end ; ind > st ; ind--)         // Find the character from the end side which matches with the st character
+            {
+                if(s[ind] == s[st]) break;
+            }
+            for(int k = ind ; k < end ; k++)
+            {
+                swap(s[k],s[k+1]);                   // Start swapping from the matching character upto the end
+                ans++;
+            }
+        }
+    }
+    if(ans_)
+      return ans;
+    else
+      return -1;
+}
+int main()
+{
+    string s;
+    cout << "Enter the string : ";
+    cin >> s;
+    int ans = func(s);
+    if(ans == -1) cout << "Impossible";
+    else cout << ans;
+    return 0;   
+}
