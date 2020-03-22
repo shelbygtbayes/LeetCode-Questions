@@ -1,0 +1,49 @@
+class Solution {
+public:
+    /**
+     * @param s: the string
+     * @return: length of longest semi alternating substring
+     */
+    int longestSemiAlternatingSubstring(string &s) {
+        // write your code here
+        if(s.size() <= 2) return s.size();
+        bool first_a , second_a;
+        bool first_b , second_b;
+        first_a = second_a = 0;
+        first_b = second_b = 0;
+        int c = 0,len = 0,max_ans = -1;
+        while( c < s.size() )
+        {
+            if(s[c] == 'a')
+            {
+                first_b = second_b = 0;
+                if(!first_a)
+                    first_a = 1;
+                else if(!second_a)
+                    second_a = 1;
+                else
+                {
+                 if(len > max_ans) max_ans = len;
+                 len = 1;
+                }
+            }
+            else
+            {
+                first_a = second_a = 0;
+                if(!first_b)
+                    first_b = 1;
+                else if(!second_b)
+                    second_b = 1;
+                else
+                {
+                    if(len > max_ans) max_ans = len;
+                    len = 1;
+                }
+            }
+            len++;
+            c++;
+        }
+        if(len > max_ans) max_ans = len;
+        return max_ans;
+    }
+};
