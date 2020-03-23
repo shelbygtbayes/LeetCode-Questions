@@ -1,0 +1,74 @@
+// DFS APPROACH
+class Solution {
+public:
+    bool dfs(map<int,bool>& to_do , map<int,bool>&fin , int n , map<int , vector<int> > adj)
+    {
+        if(fin[n]) return 1;                    // Finished
+        if(to_do[n]) return 0;                 //  Not Finished ( Started but not completed )
+        to_do[n] = 1;
+        bool complete = 1;
+        for(auto v : adj[n])
+        {
+            complete = complete and dfs(to_do , fin , v , adj);
+        }
+        fin[n] = complete;                // All Prerequisites Completed
+        return fin[n];
+    }
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        map<int,bool> fin;
+        map<int,bool> to_do;
+        map<int , vector<int> > adj;
+        for(int k = 0; k < prerequisites.size() ; k++)
+        {
+            adj[prerequisites[k][0]].push_back(prerequisites[k][1]);      // Dependency Graph
+        }
+        for(int n = 0; n < numCourses ; n++)
+        {
+            if(!dfs(to_do , fin , n , adj)) return 0;
+        }
+        return 1;
+    }
+};
+// The Above apprach gave TLE and enforces us to do Topological sort approach
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_map<int,int> indegree;            // To Get the In-Degree of a Node ( Size of Adj_list of Reverse Graph )
+        unordered_map<int , vector<int>> graph;
+        unordered_map<int , vector<int>> reverse_graph;
+        queue<int> q;
+        for(int n = 0 ; n < prerequisites.size() ; n++)
+        {
+            graph[prerequisites[n][1]].push_back(prerequisites[n][0]);
+            reverse_graph[prerequisites[n][0]].push_back(prerequisites[n][1]);
+        }
+        for(int n = 0 ; n < numCourses ; n++)
+        {
+            indegree[n] = reverse_graph[n].size();
+            if(indegree[n] == 0)                               // If '0' means the course is completed
+                q.push(n);
+        }
+        int completed = 0;
+        while(!q.empty())
+        {
+            int course = q.front();
+            q.pop();
+            completed++;
+            for(auto c : graph[course])                // Now Update the other Courses having the 'course' as its prerequisites 
+            {
+                indegree[c]--;                       //   By reducing it's in-degree
+                if(indegree[c] == 0) q.push(c);     // Update the queue
+            }
+        }
+        if(completed == numCourses) return true; // Check All the Courses completed or not
+        return false;
+    }
+};
+
+
+
+
+
+
+
+
