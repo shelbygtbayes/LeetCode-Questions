@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        // Hash to Make Effective the BFS
+        unordered_set<string> hash(wordList.begin() , wordList.end());
+        
+        if(hash.count(endWord) == 0) return 0;
+        queue<string> q;
+        map<string,int> dis;
+        int n = wordList[0].size(); // string size
+        
+        q.push(beginWord);
+        dis[beginWord] = 0; // Distance from start to start
+       
+        while(!q.empty())
+        {
+            string f = q.front();
+            string original = f;
+            q.pop();
+         //   Check for endWord
+            if(f == endWord) return dis[endWord] + 1;
+            for(int c = 0 ; c < n ; c++)
+            {
+                char original_letter = f[c]; // Now Replace the original character
+                for(char alphabet = 'a' ; alphabet <= 'z' ; alphabet++)
+                {
+                    if(alphabet != original_letter)
+                    {
+                        f[c] = alphabet;
+                        // To find the string in the Hash
+                        if(hash.find(f) != hash.end())
+                        {
+                            q.push(f);
+                            dis[f] = dis[original] + 1;
+                        // Update the distance
+                            hash.erase(f);
+                        // Erase to avoid the repitition over and over
+                        }
+                    }
+                }
+                f[c] = original_letter; // Revert to original To check other Combinations
+            }
+        }
+        return 0;
+    }
+};
