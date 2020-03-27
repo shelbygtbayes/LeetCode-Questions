@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+int total_cost(int h , vector<int> &ht , vector<int> &c)
+{
+    int cost = 0;
+    for(int k = 0 ; k < ht.size() ; k++)
+    {
+        cost += abs((ht[k] - h)*c[k]);
+    }
+    return cost;
+}
+int func(int n , vector<int> &h , vector<int> &c)
+{
+   int min_h = 0 , max_h = *max_element(h.begin(),h.end()) +1;
+   int ans = INT_MAX;
+   while(min_h < max_h)
+   {
+       int mid_h = min_h + (max_h - min_h)/2;
+       // Determine the Cost for mid height and it's adjacent
+       
+       int midh_cost , below_cost , above_cost ;
+       midh_cost = total_cost( mid_h , h , c);
+       below_cost = total_cost( mid_h - 1, h , c);
+       above_cost = total_cost( mid_h  + 1, h , c);
+       
+       // Check for Mid height
+       if(ans == midh_cost) break; // Saturate
+       ans = min(ans , midh_cost); // Update
+       // Binary Search Pointers Update
+       
+       if(minh_cost < midh_cost)        max_h = mid_h;     // Since To find minimum ( left Movement )
+       else if(maxh_cost < midh_cost)   min_h = mid_h + 1; // Right Movement
+   }
+   return ans;
+}
+int main() {
+	int n , t , temp;
+	vector<int> cost , height , ans;
+	cin >> t;
+	while(t--)
+	{
+	    cin >> n;
+	    cost.clear();
+	    height.clear();
+	    for(int k = 0 ; k < n ; k++)
+	    {
+	        cin >> temp;
+	       height.push_back(temp);
+	    }
+	    for(int k = 0 ; k < n ; k++)
+	    {
+	        cin >> temp;
+	        cost.push_back(temp);
+	    }
+	    ans.push_back(func(n , height , cost));
+	}
+	for(auto c : ans)
+	{
+	    cout << c << endl;
+	}
+	return 0;
+}
