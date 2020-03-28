@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    int n , temp;
+    cin >> n;
+    vector<int> v;
+    for(int i = 0 ; i < n; i++)
+    {
+        cin >> temp;
+        v.push_back(temp);
+    }
+    sort(v.begin() , v.end());
+    int st = 0 , end = n-1;
+    pair<int,int> ans = make_pair(INT_MAX , 0);
+    int prev_sum = INT_MAX;
+    while(st < end)
+    {
+        int sum = v[st] + v[end];
+        if((abs(sum) < abs(prev_sum)) or (abs(sum) == abs(prev_sum) and ans.first > v[st]))
+        {
+            ans = make_pair(v[st],v[end]);
+            prev_sum = sum;
+        }
+        if(sum == 0) break;
+        else if(sum > 0) end--;
+        else st++;
+    }
+    cout << ans.first <<" "<<ans.second;
+    return 0;
+}
