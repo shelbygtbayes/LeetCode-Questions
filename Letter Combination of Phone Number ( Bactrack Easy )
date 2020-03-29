@@ -1,0 +1,41 @@
+class Solution {
+public:
+    
+    void dfs(int pos ,vector<string> & ans , string digits , map<char , vector<char> > mapping , string create)
+    {
+        if(pos == digits.size())
+        {
+            ans.push_back(create);  
+        }
+        else
+        {
+            for(auto c : mapping[digits[pos]])
+            {
+                create += c;
+                dfs(pos+1 , ans , digits , mapping , create);
+                create.pop_back();                            // To Remove the Last char
+            }
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        vector<string> ans;
+        if(digits.size() == 0) return ans;
+        map<char , vector<char> > mapping;
+        char alpha = 'a';
+        int cnt , net;
+        string create = "";
+        for(char c = '2' ; c <= '9' ; c++)
+        {
+            cnt = 0;
+            if(c == '7' || c == '9') net = 4;
+            else net = 3; 
+            while(cnt < net)
+            {
+                mapping[c].push_back(alpha++);
+                cnt++;
+            }
+        }
+        dfs(0 , ans , digits , mapping , create);
+        return ans;
+    }
+};
