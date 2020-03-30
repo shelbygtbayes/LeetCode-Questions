@@ -29,9 +29,9 @@ int left_max = 0, right_max = 0;
 int l = 0, r = n - 1; 
     while (l <= r) 
     { 
-        if (arr[l] < arr[r]) 
+        if (H[l] < H[r]) 
         { 
-            if (arr[lo] > left_max) 
+            if (H[l] > left_max) 
                 // update max in left 
                 left_max = H[l]; 
             else
@@ -41,7 +41,7 @@ int l = 0, r = n - 1;
         } 
         else 
         { 
-            if (arr[r] > right_max) 
+            if (H[r] > right_max) 
                 // update right maximum 
                 right_max = H[r]; 
             else
