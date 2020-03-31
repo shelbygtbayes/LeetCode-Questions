@@ -1,0 +1,110 @@
+#include <iostream>
+#include<vector> 
+#include<stack>
+#include<queue>
+#include<map>
+using namespace std;
+struct node
+{
+    int val;
+    node* left;
+    node* right;
+};
+node* newNode(int v)
+{
+    node* n = new node();
+    n->val = v;
+    n->left = NULL;
+    n->right = NULL;
+    return n;
+}
+// To determine the Parent's path in the stack
+bool func_parent(stack<node*> &p  , node* root , int key)
+{
+    if(!root) return 0;
+    else if(root->val == key)
+    {
+        p.push(root);
+        return 1;
+    }
+    else
+    {
+        p.push(root);
+        if(func_parent(p ,root->left , key)) return 1;
+        else if(func_parent(p ,root->right , key)) return 1;
+        p.pop();
+        return 0;
+    }
+}
+// Min Time to burn the Tree
+int minTime(node* r , int key)
+{
+    stack<node*> parent;
+    if(func_parent(parent,r,key))
+    {
+        int time = 0;
+        queue<node*> q;
+        map<node*,bool> vis;
+        node* target = parent.top();  
+        parent.pop();
+        q.push(target);
+        while(!q.empty())
+        {
+            node* burnt = q.front();// Target at 1st time
+            bool set = 0;
+            q.pop();
+            vis[burnt] = 1;// Marked
+            cout << "At time = "<<time<<" burning "<<burnt->val<<endl;
+            if(!parent.empty()) // Chckout it's parent
+            {
+                node* parent_node = parent.top();
+                parent.pop();
+                q.push(parent_node);
+                //cout << "At time = "<<time<<" pushed "<<parent_node->val<<endl;
+                set = 1;
+            }
+            if(burnt->left and !vis[burnt->left]) // Left node
+            {
+                set = 1;
+                q.push(burnt->left);
+                //cout << "At time = "<<time<<" pushed "<<burnt->left->val<<endl;
+            }
+            if(burnt->right and !vis[burnt->right]) // right node
+            {
+                set = 1;
+                q.push(burnt->right);
+                //cout << "At time = "<<time<<" pushed "<<burnt->right->val<<endl; 
+            }
+            if(set) time++;
+        }
+        return time;
+    }
+    else return -1;
+}
+int main() {
+	
+	  node* root = newNode(1); 
+    root->left = newNode(2); 
+    root->right = newNode(3); 
+    root->left->left = newNode(4); 
+    root->left->right = newNode(5); 
+    root->right->left = newNode(6); 
+    root->left->left->left = newNode(8); 
+    root->left->right->left = newNode(9); 
+    root->left->right->right = newNode(10); 
+    root->left->right->left->left = newNode(11); 
+    
+    int target = 11; 
+    /*if(func_parent( parent  , root , target))
+    {
+      //int t;
+      while(!parent.empty())
+      {
+          cout << parent.top()->val << " ";
+          parent.pop();
+      }
+    }*/
+    cout << minTime(root, target); 
+  
+    return 0; 
+}
