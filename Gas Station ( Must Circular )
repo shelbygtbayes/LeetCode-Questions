@@ -1,0 +1,55 @@
+class Solution {
+public:
+// Approach 1
+// O(n^2)  
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        vector<int> start;
+        int n = gas.size();
+        for(int p = 0 ; p < n ; p++)
+        {  
+            if(gas[p] >= cost[p]) // Only Possible if Amount of gas >= cost to Travel to it's adjacent
+                start.push_back(p);    
+        }
+        for(auto st : start)
+        {
+            int gas_ = gas[st] , prev = st;
+            bool flag = 1;
+            // Circular Tour
+            for(int pos = (st+1)%n ; pos!= st ; pos = (pos+1)%n)
+            {
+                if(gas_ - cost[prev] < 0)
+                {
+                    flag = 0;
+                    break;
+                }
+                gas_ = (gas_ - cost[prev]) + gas[pos]; // Update the Gas Amount
+                prev = pos;   // Update the Previous Position
+            }
+            // Finally Check for gas_amount available to reach the starting position
+            if(flag and gas_ >= cost[prev]) return st;
+        }
+        return -1;
+    }
+};
+
+// Approach 2 O(n)
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int tank_ = 0 , total_cost_ = 0 , st = 0 , n = gas.size();
+        for(int i = 0 ; i < n ; i++)
+        {
+            total_cost_ = total_cost_ + (gas[i] - cost[i]);
+            tank_ = tank_ + (gas[i] - cost[i]);
+            if(tank_ < 0) 
+            {
+                tank_ = 0;     // Empty The Tank
+                st = (i+1)%n; // Choose next Starting Point
+            }
+        }
+        // If Total Round Cost to reach starting Point Again is Negative 
+        if(total_cost_ < 0) return -1;
+        return st;
+    }
+};
