@@ -1,0 +1,50 @@
+#include <iostream>
+#include<vector>
+using namespace std;
+bool check_dim(int r, int c , int n , int m )
+{
+  if(r < 0 || r == n || c < 0 || c == m ) return 0;
+  return 1;
+}
+int func(int n , int m )
+{
+  int cnt = 0 , r = 0 , c = 0 , curr_dir = 0;     // Set Current Direction to Right
+  int matrix[101][101] = {0};                    // Matrix Intialization
+  int dx[4] = {0,1,0,-1};                       // {Right , Down , Left , Up}
+  int dy[4] = {1,0,-1,0};
+  while(true)
+  {
+    int x = r + dx[curr_dir] , y = c + dy[curr_dir];  // Find Next Cell
+    //cout << "Current "<<curr_dir<<endl;
+    if(!check_dim(x,y,n,m) or matrix[x][y])         // If Can't Move to Next Cell with respect to the Current direction
+    {
+      int dir = (curr_dir + 1)%4;                 
+      bool flag = 0;
+      while(dir != curr_dir)                     //    Move Right Untill Condition satisfied        
+      {
+        x = r + dx[dir] ;
+        y = c + dy[dir];
+        if(check_dim(x,y,n,m) and !matrix[x][y])    // Satisfied
+        {
+          flag = 1;
+          break; 
+        }
+        dir = (dir+1)%4;                    // Next Direction
+      }
+      if(!flag) return cnt+1;
+      curr_dir = dir;
+    }
+    matrix[r][c] = 1;                 // Mark as Visited
+    r = x;                           //  Move Forward
+    c = y;
+    cnt++;
+    curr_dir = (curr_dir + 1)%4;    // Update the Next direction 
+    //cout << "Next "<<curr_dir<<endl;
+  }
+}
+int main() {
+  int n,m;
+  cin >> n >> m;
+  cout <<"Here : "<< func(n,m); // Output
+  return 0;
+}
