@@ -1,0 +1,44 @@
+// To find K-th digit from last in a^b
+// Result Correct upto 10^20
+#include<iostream>
+#define ull unsigned long long int
+using namespace std;
+// To calculate (a*c)%p  
+ull multiply_modulo(ull a , ull c , ull p)
+{
+    // (a*c) % p = ((a%p) * (c%p)) % p;
+    return ((a%p) * (c%p)) % p;
+}
+// To calculate (a^b)%p 
+ull power_modulo( ull a , ull  b , ull p)
+{
+  ull ans = 1;
+  while( b > 0)
+  {
+    if(b & 1) // b % 2
+    {
+      ans = (ans*a)%p;
+    }
+    // Here c = a
+    a = multiply_modulo(a,a,p); // a = a^2
+    b = b>>1;                  //  b = b/2
+  }
+  return ans;
+}
+int func(int a , int b , int k)
+{
+    ull modulo_p = 1 , ans ;
+    for(int i = 0 ; i < k ; i++)
+        modulo_p *= 10;        // 10 ^ k
+    ans = power_modulo(a , b , modulo_p);
+    modulo_p = modulo_p/10; // ( To Get kth digit)
+    return ans/modulo_p;   // ans Digit
+}
+int main()
+{
+    int a , b , k; 
+    cin >> a >> b >> k;
+//    for(int i = k ; i >= 1 ; i--)
+    cout << func(a,b,k);
+    return 0;
+}
