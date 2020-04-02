@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+using namespace std;
+// O(n*n*log(n)) [ loop + Substr + Priority_queue push ]
+string lexico_minim_string_rotation(string s)
+{
+  int n = s.size();
+  string r = s + s;
+  priority_queue<string , vector<string> , greater<string> > pq;
+  for(int i = 0 ; i < n ; i++)
+  {
+    pq.push(r.substr(i,n));
+  }
+  return pq.top();
+}
+// O(n*n) Space O(n)
+string minLexicoRotation(string s)
+{
+  vector<string> substrings;
+  int n = s.size(); 
+  for(int i = 0 ; i < n ; i++)
+  {
+    string sub = "";
+    sub += s[i];
+    for(int j = (i+1)%n ; j != i ; j = (j+1)%n )
+    {
+      sub += s[j];
+    }
+    substrings.push_back(sub);
+  }
+  sort(substrings.begin() , substrings.end()); // In Worst Case O( n*n )
+  return substrings[0];
+}
+int main() {
+  //cout << lexico_minim_string_rotation("BCABDADAB") << endl;
+  cout << minLexicoRotation("BCABDADAB") << endl;
+  return 0;
+}
