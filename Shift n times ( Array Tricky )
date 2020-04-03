@@ -1,0 +1,40 @@
+#include <iostream>
+using namespace std;
+void func(int *arr , int n)
+{
+int cnt = 0 , st = 0 , end = n-1;
+  while(st < n)
+  {
+    if(arr[st] == 2 and st != n-1) cnt++;
+    st++;
+  }
+  //for(int i = 0 ; i < n ; i++)
+  //  cout << arr[i] <<" ";
+  //cout << endl;
+  if(cnt != 0)
+  { 
+    int pt = n - cnt - 1;
+    while(pt >= 0 and end >= 0)
+    {
+      arr[end] = arr[pt];
+      end--;
+
+      if(arr[pt] == 2)
+      {
+        arr[end] = 2;
+        end--;
+      }
+
+      pt--;
+    }
+  }
+  return;
+}
+int main() {
+  int arr[] = {23, 2, 3, 12, 2, 2, 34, 55, 66, 79};
+  int n = sizeof(arr)/sizeof(arr[0]);
+  func(arr,n);
+  for(int i = 0 ; i < n ; i++)
+    cout << arr[i] <<" ";
+  return 0;
+}
