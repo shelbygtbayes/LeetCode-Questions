@@ -1,0 +1,51 @@
+#include<iostream>
+using namespace std;
+// Return Maximum long break with at max k times rearrangement
+int long_break(int start[] , int end[] , int n , int k , int time)
+{
+    // Considering the given data as unsorted;
+    /*vector< pair<int,int> > meetings;
+    for( int m = 0 ; m < n ; m++)
+    {
+        meetings.push_back( make_pair(start[m] , end[m]));
+    }
+    sort(meetings.begin() , meetings.end());
+    */
+    int gap[n+1];
+    //gap[0] = meetings[0].first; // Start
+    gap[0] = start[0];
+    for(int m = 1 ; m < n ; m++)
+    {
+        //gap[m] = meetings[m].first - meetings[m-1].second;
+        gap[m] = start[m] - end[m-1];
+    }
+    //gap[n] = time - meetings[n-1].second;
+    gap[n] = time - end[n-1];
+    // Now the Answer will be Maximum displacement or The Maximum subset sum of size = k+1
+    int ans = -1 , end_ = 1 , st = 0 , sum =gap[0];
+    bool flag = 1;
+    while(end_ <= n)
+    {
+        if(end_ == k) flag = 0;    
+        
+        if(flag) sum += gap[end_];
+        else 
+        {
+            ans = max(ans , sum);
+            sum -= gap[st];
+            sum += gap[end_];
+            st++;
+        }
+        end_++;
+    }
+    ans = max(ans , sum);
+    return ans;
+}
+int main()
+{
+    int start[] = {4, 6, 7, 10};
+    int end[] = {5, 7, 8, 11};
+    int n = sizeof(start)/sizeof(int), k = 2 , t = 15;
+    cout << long_break(start,end,n,k,t);
+    return 0;
+}
