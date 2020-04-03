@@ -1,0 +1,72 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+        //  BFS Traversal To Mark the Parent 
+        map< TreeNode* , TreeNode* > parent;
+        parent[root] = NULL; 
+        queue< TreeNode* > q;
+        q.push(root);
+        while(!q.empty())
+        {
+            TreeNode * n = q.front();
+            q.pop();
+            if(n->left)
+            {
+                q.push(n->left);
+                parent[n->left] = n;
+            }
+            if(n->right)
+            {
+                q.push(n->right);
+                parent[n->right] = n;
+            }    
+        }
+        // BFS To Determine The Nodes at Distance 'K'
+        map< TreeNode* , bool > vis;
+        queue<pair<TreeNode* , int >> level; //( Node, Distance)
+        level.push( make_pair(target , 0));
+        vis[target] = 1;
+        int dis = 1;
+        while(!level.empty())
+        {
+            pair<TreeNode * , int> node = level.front();
+            
+            dis = node.second;           // Distance
+            if(dis == K) break;
+            
+            TreeNode* n = node.first;  // Node
+            
+            vis[n] = 1;              //   Mark as Visited
+            level.pop();
+            // If Exists and Not visited then Push and Update the distance
+            if(parent[n] and !vis[parent[n]])
+               level.push(make_pair(parent[n] , dis + 1));             
+         
+            if(n->left and !vis[n->left])
+                level.push( make_pair(n->left , dis + 1));
+            
+            if(n->right and !vis[n->right])  
+                level.push( make_pair(n->right , dis + 1));
+           
+        }
+        // Get the Queue Nodes
+        vector<int> ans;
+        while(!level.empty())
+        {
+            pair<TreeNode * , int> n = level.front();
+            level.pop();
+            
+            ans.push_back( (n.first)->val );
+        }
+        return ans;
+    }
+};
