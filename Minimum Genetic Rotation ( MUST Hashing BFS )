@@ -1,0 +1,62 @@
+class Solution {
+public:
+    // BFS Rocks With Hashing
+    bool func(string s , string m)
+    {
+        int cnt = 0 , st = 0;
+        while(st < s.size())
+        {
+            if(s[st] != m[st] ) cnt++;
+            if( cnt > 1 ) return false;
+        }
+        return true;
+    }
+    int minMutation(string start, string end, vector<string>& bank) {
+        // Gives TLE without Unordered Set
+        unordered_set<string> hash(bank.begin() , bank.end());
+        if( hash.count(end) == 0) return -1;
+        
+        queue< string > q;
+        map< string , int > dis;
+        q.push(start);
+        dis[start] = 0;
+        int n = start.size();
+        while(!q.empty())
+        {
+            string s = q.front();
+            q.pop();
+            if(s == end) return dis[s];
+            string original = s;
+            for(int c = 0 ; c < 8 ; c++) // O(1)
+            {
+                char prev = s[c];
+                s[c] = 'A';
+                if(s[c] != prev and hash.find(s) != hash.end())
+                {
+                    dis[s] = dis[original] + 1;
+                    q.push(s);
+                }
+                s[c] = 'C';
+                if(s[c] != prev and hash.find(s) != hash.end())
+                {
+                    dis[s] = dis[original] + 1;
+                    q.push(s);
+                }
+                s[c] = 'G';
+                if(s[c] != prev and hash.find(s) != hash.end())
+                {
+                    dis[s] = dis[original] + 1;
+                    q.push(s);
+                }
+                s[c] = 'T';
+                if(s[c] != prev and hash.find(s) != hash.end())
+                {
+                    dis[s] = dis[original] + 1;
+                    q.push(s);
+                }
+                s[c] = prev;
+            }
+        }
+        return -1;
+    }
+};
