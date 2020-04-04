@@ -1,0 +1,67 @@
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+int getParent(int r , map<int,int> & parent)
+{
+    while(r != parent[r])
+    {
+        r = parent[r];
+    }
+    return parent[r];
+}
+int Components(vector<vector<int>> edges , int removeNode , int n , map<int,int>  parent)
+{
+    int comp = 0 , u , v;
+    for(auto edge : edges)
+    {
+        u = edge[0] , v = edge[1];
+        if(u == removeNode || v == removeNode) continue; // Skip Those Edges
+        int parent1 = getParent(u , parent) , parent2 = getParent(v , parent);
+        if(parent1 != parent2)
+        {
+            // Union 
+            parent[parent1] = parent[parent2];
+        }
+    }
+    // Now Count the Components
+    for(int node = 0 ; node < n ; node++)
+    {
+        if(node != removeNode and node == parent[node]) // THE ROOT of the component
+            comp++;
+    }
+    return comp;
+}
+vector<int> func(int n , int m , vector<vector<int>> edges)
+{
+    map<int,int> parent;
+    vector<int> ans;
+    for(int node = 0 ; node < n ; node++)
+    {
+        parent[node] = node;
+    }
+    int init_comp = Components(edges , -1 , n , parent);
+    for(int removeNode = 0 ; removeNode < n ; removeNode++)
+    {
+        if(Components(edges , removeNode , n , parent) != init_comp) // No change
+            ans.push_back(removeNode);
+    }
+    return ans;
+}
+int main()
+{
+    int n  = 7, m = 7;
+    vector<vector<int>> edges{
+        {0, 1},
+        {0, 2}, 
+        {1, 3}, 
+        {2, 3}, 
+        {2, 5}, 
+        {5, 6}, 
+        {3, 4}
+    }; 
+    vector<int> ans = func(n,m,edges);
+    for(auto i : ans)
+        cout << i <<" ";
+    return 0;
+}
