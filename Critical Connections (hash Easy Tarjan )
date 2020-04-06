@@ -1,0 +1,40 @@
+class Solution {
+public:
+    // NEED HASHING AND Graph ( unordered_map )
+    void dfs(int vertex , int parent , vector<int> &min_time , int time , vector<vector<int>> &ans , unordered_set<int> &vis , unordered_map<int,vector<int>> graph)
+    {
+        vis.insert( vertex )
+        min_time[vertex] = time;
+        for(auto u : graph[vertex])
+        {
+            if(u == parent) continue;
+            else if( vis.find(u) == vis.end() ) // Not visited
+            {
+                dfs(u , vertex , min_time , time+1 , ans , vis , graph);        
+            //      Node ,Parent            
+            }
+            min_time[vertex] = min( min_time[vertex] , min_time[u] );   // Update the Min_time
+
+/*----IMP----*/if( min_time[u] > time)                                   //   Critical edge condition
+            {
+                vector<int> temp{vertex , u};
+                ans.push_back(temp);
+            }
+        }
+    }
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        unordered_map<int,vector<int>> g;
+        for(auto e : connections)
+        {
+            g[e[0]].push_back(e[1]);
+            g[e[1]].push_back(e[0]);
+        }
+        unordered_set<int> vis;
+        vector<vector<int>> ans;
+        int par = -1;
+        // Since given connected graph , Hence No need of loop
+        vector<int> time(n);
+        dfs(0 , -1 , time , 1 , ans , vis , g);
+        return ans;
+    }
+};
