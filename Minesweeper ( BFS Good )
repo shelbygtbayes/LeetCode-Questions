@@ -1,0 +1,55 @@
+class Solution {
+public:
+    
+    bool exists(int r ,int c , int m , int n)
+    {
+        if(r < 0 || c < 0 || r == m || c == n) return 0;
+        return 1;
+    }
+    int dx[8] = {-1, -1, 0, 1 , 1 , 1 , 0 , -1};
+    int dy[8] = { 0,  1, 1, 1 , 0 , -1, -1, -1};
+    void func(vector<vector<char>>& board , int r , int c )
+    {
+          if(board[r][c] == 'M') // Mine
+            {
+                board[r][c] = 'X';
+                return;
+            }
+            else                // Empty
+            {
+                int cnt = 0 , m = board.size() ,n =  board[0].size();
+                // Check 8 directions
+                for(int dir = 0 ; dir < 8 ; dir++)
+                {
+                    int x = r + dx[dir] , y = c + dy[dir];
+                    if(exists(x , y , m , n))
+                    {
+                        if(board[x][y] == 'M') cnt++;
+                    }
+                }
+                // IF Mine Found
+                if(cnt > 0) 
+                {
+                    board[r][c] = cnt + 48;
+                    return;
+                }
+                // Else Recurssive check for other Empty
+                board[r][c] = 'B';
+                for(int dir = 0 ; dir < 8 ; dir++)
+                {
+                    int x = r + dx[dir] , y = c + dy[dir];
+                    if(exists(x , y , m , n) and board[x][y] == 'E')
+                    {
+                        func(board, x, y ) ;
+                    }
+                }
+            
+            }
+       
+    }
+    vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+
+        func(board, click[0] , click[1]) ;
+        return board;
+    }
+};
