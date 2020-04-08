@@ -1,0 +1,78 @@
+class Solution {
+public:
+    int snakesAndLadders(vector<vector<int>>& board) {
+        int n = board.size();
+        int * linear = new int[(n*n)+1];
+        linear[0] = 0;
+        int ind = 1;
+        bool left_to_right = 1;
+        for(int r = n-1 ; r >= 0; r--)
+        {
+            if(left_to_right)
+            {
+                for(int c = 0 ; c < n ; c++)
+                    linear[ind++] = board[r][c];
+            }
+            else
+            {
+                for(int c = n-1 ; c >= 0 ; c--)
+                    linear[ind++] = board[r][c];
+            }
+            left_to_right = 1 - left_to_right;
+        }
+    //    for(int i = 0 ; i < ind ; i++) cout << linear[i] <<" ";
+  //      cout << ind << endl;
+        queue<int> q;
+        map<int,int> dis;
+        map<int,bool> vis;
+        q.push(1);
+        vis[1] = 1;
+        while(!q.empty())
+        {
+            int curr = q.front();
+            q.pop();
+     //       cout << "Popped "<<curr<<endl;
+            if(curr == n*n) 
+                return dis[curr];
+          for(int d = 1 ; d <= 6 ; d++)
+            {
+                int new_ = d+curr;
+                if(new_ <= n*n and !vis[new_])
+                {
+                    if(linear[new_] == -1)
+                    {
+                        q.push(new_);
+                        vis[new_] = 1;
+                        dis[new_] = dis[curr] + 1;
+                    cout << "1Pushed "<<new_<<" Distance : "<<dis[new_]<<endl;
+                        
+                    }
+                    else if(!vis[linear[new_]])
+                    {
+                        q.push(linear[new_]);    
+                       vis[linear[new_]] = 1;
+                     //    vis[new_] = 1;
+                        dis[linear[new_]] = dis[curr] + 1;
+                        cout << "2Pushed "<<linear[new_]<<" Distance : "<<dis[linear[new_]]<<endl;
+                    }
+                 
+                }
+            }
+        }
+        return -1;
+    }
+};
+/*
+
+[[-1,-1,-1,46,47,-1,-1,-1]
+,[51,-1,-1,63,-1,31,21,-1],
+[-1,-1,26,-1,-1,38,-1,-1],
+[-1,-1,11,-1,14,23,56,57],
+[11,-1,-1,-1,49,36,-1,48],
+[-1,-1,-1,33,56,-1,57,21],
+[-1,-1,-1,-1,-1,-1,2,-1],
+[-1,-1,-1,8,3,-1,6,56]]
+
+*/
+
+
