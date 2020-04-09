@@ -1,0 +1,121 @@
+// Best Approach using stl
+class Solution {
+public:
+    int local(vector<int> A)
+    {
+        int n = A.size() , ans = 0;
+        for(int i = 0 ; i < n-1 ; i++)
+        {
+            if(A[i] > A[i+1]) ans++;
+        }
+        return ans;
+    }
+   
+    int global(vector<int>& A)
+    {
+        int cnt = 0 , n = A.size();
+        set<int> bst;
+        for(auto e : A)
+        {
+            bst.insert(e);
+            auto pos = bst.upper_bound(e);     // Here Difference between iterators doesn't work
+            cnt += distance(pos , bst.end()); //  Hence Require distance O(n) worst case
+        }
+        return cnt;
+    }
+    bool isIdealPermutation(vector<int>& A) {
+        if(A.size() < 2) return 1;
+        return local(A) == global(A);
+    }
+};
+// Only When Array elements are between [0 .. n-1 ]
+
+class Solution {
+public:
+    bool isIdealPermutation(vector<int>& A) {
+        for(int i = 0 ; i < A.size() ; i++)
+        {
+            if(abs(A[i] - i) > 1) return false;
+        }
+        return true;
+    }
+};
+
+// Approach Using Merge Sort
+class Solution {
+public:
+    int local(vector<int> A)
+    {
+        int n = A.size() , ans = 0;
+        for(int i = 0 ; i < n-1 ; i++)
+        {
+            if(A[i] > A[i+1]) ans++;
+        }
+        return ans;
+    }
+     //5 6 7 8 1 2 3 4
+    int merge(vector<int> &arr , int low , int high , int mid)
+    {
+        int cnt = 0 , l = low , m = mid+1;
+        vector<int> temp;
+        while(l <= mid and m <= high)
+        {
+            if(arr[l] > arr[m])
+            {
+                temp.push_back(arr[m]);
+                m++;
+                cnt += (mid - l + 1);
+            }
+            else
+            {
+                temp.push_back(arr[l]);
+                l++;
+            } 
+        }
+        // cout << "OK"<<endl;
+        while(l <= mid)
+        {
+            temp.push_back(arr[l]);
+            l++;
+        }
+        while(m <= high)
+        {
+            temp.push_back(arr[m]);
+            m++;
+        }
+        
+        int ind = low;
+        for(auto e : temp)
+        {
+            arr[low++] = e;
+            
+          //  cout << e << " ";
+        }
+         cout << endl;
+         return cnt;
+    }
+    int mergesort(vector<int> &arr , int low , int high)
+    {
+        int cnt = 0;
+        if(low < high)
+        {
+            int mid = low + (high-low)/2;
+            //cout <<low <<" "<<mid<<" "<<high<<endl;
+            cnt += mergesort(arr , low , mid);
+            cnt += mergesort(arr , mid+1 , high);
+            cnt += merge(arr , low , high , mid);
+        }
+        return cnt;
+    }
+    int global(vector<int>& A)
+    {
+        int n = A.size();
+       
+        return mergesort(A , 0 , n-1);
+    }
+    bool isIdealPermutation(vector<int>& A) {
+        // Merge Sort Approach
+        if(A.size() < 2) return 1;
+        return local(A) == global(A);
+    }
+};
