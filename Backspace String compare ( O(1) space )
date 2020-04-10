@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool backspaceCompare(string S, string T) {
+        int ind1 = 0 , ref1 = 0;
+        // Moving in reverse direction and updating the string1
+        while(ind1 < S.size())
+        {
+            if(S[ind1] == '#')
+            {
+                ref1 = max(0,--ref1);
+                ind1++;
+            }
+            else
+            {
+                S[ref1] = S[ind1];
+                ref1++;
+                ind1++;
+            }
+        }
+        int ind2 = 0 , ref2 = 0;
+        while(ind2 < T.size())
+        {
+            if(T[ind2] == '#')
+            {
+                ref2 = max(0,--ref2);
+                ind2++;
+            }
+            else
+            {
+                T[ref2] = T[ind2];
+                ref2++;
+                ind2++;
+            }
+        }
+        if(ref1 != ref2) return 0;
+        for(int ind = 0 ; ind < ref1 ; ind++)
+        {
+            if(S[ind] != T[ind]) return 0;
+        }
+        return 1;
+    }
+};
