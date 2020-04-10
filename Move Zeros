@@ -1,3 +1,41 @@
+Approach O(1)
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+     int st = -1 , end = nums.size();
+     bool flag = 0;  
+     // First Pair such that nums[st] = 0 and nums[end] = 1
+     for(int ind = 0 ; ind < nums.size() ; ind++)
+     {
+         if(nums[ind] == 0 and !flag)
+         {
+             flag = 1;
+             st = ind;
+         }
+         else if(nums[ind] != 0 and flag)
+         {
+             end = ind;
+             break;
+         }
+     }
+     if(st == -1) return;
+     // Swap every such (nums[st] , nums[end]) = (0, not 0)
+     while(st < end and end < nums.size())
+     {
+         if(nums[st] == 0 and nums[end] != 0)
+         {
+             swap(nums[st] , nums[end]);
+             st++;
+             end++;
+         }
+         else if(nums[st] != 0) st++;
+         else end++;
+     }
+    }
+};
+
+
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
