@@ -1,3 +1,37 @@
+// Better Approach
+class Solution {
+public:
+    /**
+     * @param s: the string
+     * @return: length of longest semi alternating substring
+     */
+    int longestSemiAlternatingSubstring(string &s) {
+        if(s.size() < 3) return s.size();
+        int prev = 0 , ans = 1 ,cnt = 0, st = 0 , end = 1;
+        while(end < s.size())
+        {
+            if(s[prev] == s[end])  // Check with previous value
+            {
+                cnt++;
+            }
+            else                // If different reset the count
+                cnt = 0;
+            if(cnt == 2)                
+            {
+                ans = max(ans , end-st); // ((end-1)-st+1)
+                st = prev;
+                cnt = 1;   // Since still last 2 character match
+            }
+            prev++;
+            end++;
+        }
+        if(cnt < 2) // Final check
+            ans = max(ans , end-st);
+        return ans;
+    }
+};
+
+
 class Solution {
 public:
     /**
