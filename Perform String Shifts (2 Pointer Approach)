@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string stringShift(string s, vector<vector<int>>& shift) {
+        int n = s.size() , st = 0 , end = n-1;
+        if(n == 1) return s;
+        for(auto q : shift)
+        {
+            int dir = q[0] , k = q[1];
+            if(k > 0){
+                if(dir == 1)
+                {
+                    end = end-k;
+                    if(end < 0) end = n + end;
+                    st = (end+1)%n;
+                }
+                else
+                {
+                    st = (st + k)%n;
+                    end = st-1;
+                    if(end < 0) end = n + end;
+                }
+            }
+        }
+        int ind = st;
+    //    cout << st <<" "<<end<<endl;
+        bool start = 1;
+        string ans = "";
+        while(ind != st || start)
+        {
+            ans += s[ind];
+            ind = (ind+1)%n;
+            start = 0;
+        }
+        return ans;
+    }
+};
