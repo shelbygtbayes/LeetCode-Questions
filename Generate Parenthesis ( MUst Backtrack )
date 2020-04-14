@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void func(string s , vector<string> &ans  , int n , int opening , int closing)
+    {
+       
+       if(s.size() == n*2)
+       {
+           ans.push_back(s);
+           return;
+       }
+       
+       if(opening < n)
+            func(s+'(' , ans , n , opening+1 , closing);
+       if(closing < opening) 
+            func(s+')' , ans , n , opening , closing+1);
+    }
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        if(n < 1) return ans;
+        string s = "";
+        func(s,ans,n,0,0);
+        return ans;
+    }
+};
