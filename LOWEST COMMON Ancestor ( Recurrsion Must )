@@ -1,0 +1,65 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root == NULL) return NULL;
+        else if(root->val == p->val || root->val == q->val) return root;
+        else
+        {
+            TreeNode* l = lowestCommonAncestor(root->left, p , q);
+            TreeNode* r = lowestCommonAncestor(root->right, p , q);
+            if(!l and !r) return NULL;
+            else if(l and r) return root;
+            return (l != NULL) ? (l) :(r);
+        }
+    }
+};
+/*
+Trace the Path in reverse manner to find p and q and then find the 1st common point
+map<TreeNode* r , TreeNode*p> parent
+bool func(TreeNode* r , map<TreeNode* , TreeNode*> & parent , vector<TreeNode*> & path)
+{
+    if(r==NULL)
+    {
+        return 0;
+    }
+    else if(r->val == p->val)
+    {
+        return 1;
+    }
+    else if(!r->left and !r->right)
+        return 0;
+    else
+    {
+        bool not_found = 0;
+        if(r->left)
+        {
+            parent[r->left] = r;
+            path.push_back(r->left);
+            if(!func(r->left , parent,path))
+            {
+                not_found = 1;   
+            }
+        }
+        if(r->right and not_found)
+        {
+            parent[r->right] = r;
+            path.push_back(r->right);
+            if(!func(r->right , parent,path))
+            {
+                not_found = 1;
+            }
+        }
+        if(not_found)
+            path.pop_back();
+    }
+}
+    */
