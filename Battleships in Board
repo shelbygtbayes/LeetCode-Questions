@@ -1,0 +1,93 @@
+// Constant Space and Not modification ( slow )
+class Solution {
+public:
+    bool checkUpLeft(int r,int c , vector<vector<char>>& board)
+    {
+  //  if its one layer above cell is 'X', Hence due to that previous cell, this current was counted already, Hence return false
+        if(r > 0 and board[r-1][c] == 'X') return 0;
+        
+  // if it's front cell is 'X',Hence due to that previous cell, this current cell was counted already, Hence return false
+        if(c > 0 and board[r][c-1] == 'X') return 0;
+  //  Else New one
+        return 1;
+    }
+    int countBattleships(vector<vector<char>>& board) {
+        int ans = 0;
+        for(int r = 0 ; r < board.size() ; r++)
+        {
+            for(int c = 0 ; c < board[r].size() ; c++)
+            {
+            // if the cell [r][c] is a ship symbol 'X', check if it's a ship already counted
+                if(board[r][c] == 'X' and checkUpLeft(r,c,board)) ans++;
+                
+            }
+        }
+        return ans;
+    }
+};
+
+// By Modifying the board ( fast )
+class Solution {
+public:
+void func(int r ,int c ,vector<vector<char>> &board)
+{
+    int m = board.size() , n = board[0].size();
+    if(r == m  or c == n or board[r][c] == '.') return ;    
+    
+    board[r][c] = 'O';
+    
+    func(r+1 , c , board );  
+    func(r , c+1 , board );
+}
+    int countBattleships(vector<vector<char>>& board) 
+    {
+        // Modify If space utilize for the Visited Map
+        int cnt = 0;
+        for(int r = 0 ; r < board.size() ; r++)
+        {
+            for(int c = 0 ; c < board[r].size() ; c++)
+            {
+                if(board[r][c] == 'X')
+                {
+                        func(r,c,board);
+                        cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+};
+
+// Using Visited Map
+class Solution {
+public:
+void func(int r ,int c ,vector<vector<char>> &board, map<pair<int,int> ,bool>& visited)
+{
+    int m = board.size() , n = board[0].size();
+    if(r == m  or c == n) return ;
+    else if(visited[make_pair(r,c)] || board[r][c] == '.')  return ;
+    pair<int,int> p = make_pair(r,c);
+    visited[p] = 1;
+    
+    func(r+1 , c , board , visited );  
+    func(r , c+1 , board , visited );
+}
+    int countBattleships(vector<vector<char>>& board) 
+    {
+        map<pair<int,int> , bool> visited;
+        int cnt = 0;
+        for(int r = 0 ; r < board.size() ; r++)
+        {
+            for(int c = 0 ; c < board[r].size() ; c++)
+            {
+                pair<int,int> p = make_pair(r,c);
+                if(!visited[p] and board[r][c] == 'X')
+                {
+                        func(r,c,board,visited);
+                        cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+};
