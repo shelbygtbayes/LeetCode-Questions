@@ -1,0 +1,106 @@
+// Acceptable Brute Force
+class Solution {
+public:
+    int numTeams(vector<int>& rating) {
+        int ans = 0 , n = rating.size();
+        if(n < 3) return 0;
+        for(int i = 0 ; i < n-2 ; i++)
+        {
+            for(int j = i+1 ; j < n-1 ; j++)
+            {
+                if(rating[j] > rating[i])
+                {
+                    int prev = rating[j];
+                    for(int k = j+1 ; k < n ; k++)
+                    {
+                        if(rating[k] > prev)
+                        {
+                            ans++;
+                        }
+                    }
+                }
+                if(rating[j] < rating[i])
+                {
+                    int prev = rating[j];
+                    for(int k = j+1 ; k < n ; k++)
+                    {
+                        if(rating[k] < prev)
+                        {
+                            ans++;
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// TLE Using set of vectors
+class Solution {
+public:
+    int numTeams(vector<int>& rating) {
+        int n = rating.size() , cnt = 0;
+        if(n < 3) return 0;
+        set< vector<int> > ans;
+        for(int i = 1 ; i < n-1 ; i++)
+        {
+           
+            int ind = 0;
+            vector<int> I1 , D1 , I2 , D2;
+            while(ind < i)
+            {
+                if(rating[ind] < rating[i])
+                {
+                   I1.push_back(rating[ind]);
+                }
+                else if(rating[ind] > rating[i])
+                {
+                    D1.push_back(rating[ind]);
+                }
+                ind++;
+            }
+            ind = i+1;
+            if(I1.size() == 0 and D1.size() == 0) continue;
+            while(ind < n)
+            {
+                if(rating[ind] > rating[i] and I1.size() > 0 )
+                {
+                    I2.push_back(rating[ind]);
+                }
+                else if(rating[ind] < rating[i] and D1.size() > 0)
+                {
+                    D2.push_back(rating[ind]);
+                }
+                ind++;
+            }
+            if(I2.size() > 0)
+            {
+                for(auto first : I1)
+                {
+                    int second = rating[i];
+                    for(auto third : I2)
+                    {
+                        if(ans.find(vector<int>{first,second,third}) == ans.end() || ans.size() ==0 )
+                            ans.insert(vector<int>{first,second,third});
+                    }
+                }
+                
+            }
+            if(D2.size() > 0)
+            {
+                for(auto first : D1)
+                {
+                    int second = rating[i];
+                    for(auto third : D2)
+                    {
+                        if(ans.find(vector<int>{first,second,third}) == ans.end() || ans.size() ==0 )
+                            ans.insert(vector<int>{first,second,third});
+                    }
+                }
+            }
+        }
+        cnt = ans.size();
+        return cnt;
+    }
+};
