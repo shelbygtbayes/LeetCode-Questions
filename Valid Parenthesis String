@@ -1,0 +1,62 @@
+Approach 2: 2 Pointer Approach
+
+class Solution {
+public:
+    bool checkValidString(string s) {
+        if(s.size() == 1) return s[0] == '*';
+        int front_open = 0 , back_closed = 0 , n = s.size();
+        
+        for(int c = 0 ; c < n ; c++)
+        {
+            if(s[c] == '(' || s[c] == '*') front_open++;
+            else front_open--;
+            
+            if(s[n-c-1] == ')' || s[n-c-1] == '*') back_closed++;
+            else back_closed--;
+            
+            if(front_open < 0 || back_closed < 0) return 0;
+        }
+        return 1;
+    }
+};
+
+
+Approach 3: Using 2 stacks
+
+class Solution {
+public:
+    bool checkValidString(string s) {
+        
+        if(s.size() == 1) return s[0] == '*';
+        stack<char> s1 , s2;
+        for(auto c : s)
+        {
+            if(c == '(')
+                s1.push(c);
+            if(c == '*')
+                s2.push(c);
+            if(c == ')')
+            {
+                if(!s1.empty()) s1.pop();
+                else if(!s2.empty()) s2.pop();
+                else return false;
+            }
+        }
+        stack<char> s3 , s4;
+        for(int c = s.size()-1 ; c >=0 ; c-- )
+        {
+            if(s[c] == ')')
+                s3.push(s[c]);
+            if(s[c] == '*')
+                s4.push(s[c]);
+            if(s[c] == '(')
+            {
+                if(!s3.empty()) s3.pop();
+                else if(!s4.empty()) s4.pop();
+                else return false;
+            }
+        }
+        
+        return true;
+    }
+};
