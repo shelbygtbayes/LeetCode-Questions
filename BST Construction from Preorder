@@ -1,0 +1,82 @@
+// Approach 1 O(n) Using stack
+// To be check
+// Approach2 O(n) Using min-max values 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* func(int &index , int min , int max , vector<int> preorder)
+    {
+        if(index >= preorder.size() || min > max) return NULL;
+        else if(preorder[index] > min and preorder[index] < max)
+        {
+            TreeNode* root = new TreeNode(preorder[index]);
+            
+            index++;
+            
+            root->left = func(index, min , root->val ,preorder);
+            root->right = func(index, root->val , max, preorder);      
+            
+            return root;                 
+        }
+        else return NULL;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        if(preorder.size() == 0) return NULL;
+        else if(preorder.size() == 1) return new TreeNode(preorder[0]);
+        else 
+        {
+            int st = 0;
+            return func(st , INT_MIN , INT_MAX , preorder);
+        }
+    }
+};
+//Approach3 O(n^2)  
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* func(int &index , int low , int high , vector<int> preorder)
+    {
+        if(index >= preorder.size() || low > high) return NULL;
+        TreeNode* root = new TreeNode(preorder[index]);
+        index++;
+        if(low == high) return root;
+        else
+        {
+            int i;
+            for(i = low+1 ; i <= high ; i++)
+            {
+                if(root->val < preorder[i])
+                    break;
+            }
+            root->left = func(index,index, i-1,preorder);
+            
+            root->right = func(index,i, high, preorder);
+        }
+        return root;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        if(preorder.size() == 0) return NULL;
+        else if(preorder.size() == 1) return new TreeNode(preorder[0]);
+        else 
+        {
+            int st = 0;
+            return func(st , 0 , preorder.size()-1 , preorder);
+        }
+    }
+};
