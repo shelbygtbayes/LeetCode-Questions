@@ -1,0 +1,31 @@
+// Easy Method
+/*We start from the bottom right,check == 0 ;if True move up by decreasing row-count else move left by decrementing column-count.
+At the end check if there was a 1 found ; if True return it's column positon.  */
+// Binary Search
+class Solution {
+public:
+    int leftMostColumnWithOne(BinaryMatrix &binaryMatrix) {
+        int m , n;
+        m = binaryMatrix.dimensions()[0];
+        n = binaryMatrix.dimensions()[1];
+        if(m == 1 and n == 1) return (binaryMatrix.get(0,0) == 1) ? (0) :(-1);
+        int index = n+1;
+        for(int x = 0 ; x < m ; x++)
+        {
+            int low = 0 , high = n-1;
+            while(low <= high)
+            {
+                int mid = low + (high-low)/2;
+                int val = binaryMatrix.get(x,mid);
+                if(val < 1) low = mid+1;
+                else high = mid-1;
+            }
+            if(low < n)
+            {
+                index = min(index , low);
+            }
+        }
+        if(index == n+1) return -1;
+        else return index;
+    }
+};
