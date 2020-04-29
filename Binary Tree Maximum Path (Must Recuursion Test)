@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    long int max(long int a , long int b)
+    {
+        return (a > b) ? (a) : (b);
+    }
+    long int func(int &maxsum , TreeNode* root)
+    {
+        if(root == NULL) return maxsum;
+        long int left_max = INT_MIN , right_max = INT_MIN;
+        if(root->left) 
+            left_max = max(left_max , func(maxsum , root->left));
+        if(root->right) 
+            right_max = max(right_max , func(maxsum , root->right));
+        // node , node + leftSubtree , node + rightSubtree
+        long int left_right_root = max(root->val , root->val + max(left_max , right_max));
+        // Updating maxsum --> node + leftSubtree + rightSubtree  , above cases
+        maxsum = max(maxsum , max(root->val + left_max + right_max , left_right_root));
+        return left_right_root; // Maxsum w.r.t root ( because of above left and right case handling )
+    }
+    int maxPathSum(TreeNode* root) {
+        int maxsum = INT_MIN;
+        func(maxsum , root);
+        return maxsum;
+    }
+};
