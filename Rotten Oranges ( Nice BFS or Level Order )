@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size()  , m = grid[0].size() , cnt_fresh = 0;
+        queue<vector<int>> q;
+        for(int r =  0 ; r < n ; r++)
+        {
+            for(int c = 0 ; c < m ; c++)
+            {
+                if(grid[r][c] == 2)
+                {
+                    q.push(vector<int>{r,c});
+                    grid[r][c] = -1;            // Mark visited
+                }
+                else if(grid[r][c] == 1)
+                    cnt_fresh++;              // To check counter at last whether all visited or not
+            }
+        }
+        if(cnt_fresh == 0) return 0;        // If all rotten
+        
+        int ans = 0;
+        int dx[4] = {-1, 0 , 1 , 0 };
+        int dy[4] = {0 , -1 , 0 , 1};
+        
+        int size = q.size();
+        while(!q.empty())
+        {
+            vector<int> s = q.front();
+            q.pop();
+            size--;                          // Imp here to check the break of next level / time
+            for(int i = 0 ; i < 4 ; i++)
+            {
+                int x = s[0] + dx[i] , y = s[1] + dy[i];
+                if(x < 0 || x >= n || y < 0 || y >= m || grid[x][y] == 0 || grid[x][y] == -1)  // If not exists or empty or visited
+                    continue;
+                else
+                {
+                    q.push(vector<int>{x,y});
+                    grid[x][y] = -1;                      //  Mark visited
+                    cnt_fresh--;                         //   Reduce the fresh orange
+                }
+            }
+            if(size == 0 and !q.empty())               // Important part to check the answer
+            {
+                ans++;
+                size = q.size();
+            }
+                
+        } 
+        if(cnt_fresh != 0) return -1;               // If fresh oranges left
+        return ans;
+    }
+};
