@@ -1,0 +1,62 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+      vector<int> ans;
+      int n = matrix.size(); 
+      if(n == 0) return ans;
+      int m = matrix[0].size();
+      int top = 0, bottom = n - 1, right = m - 1, left = 0;
+      int layer = 0 , cnt = 0 , direction = 0;// , row = 0 , col = 0;
+      while( ans.size() < m*n )
+      {
+        if( direction == 0) // Right
+        {
+          for(int c = left ; c <= right ; c++)
+          {
+            ans.push_back( matrix[ top ][ c ] );
+          }
+          top++;
+        }
+        else if( direction == 1) // Downward
+        {
+          for(int r = top ; r <= bottom ; r++)
+          {
+            ans.push_back( matrix[ r ][right] );
+          }
+          right--;
+        }
+        else if( direction == 2 )// Left
+        {
+          for(int c = right ; c >= left ; c--)
+          {
+            ans.push_back( matrix[bottom][ c ] );
+          }
+          bottom--;
+        }
+        else if( direction == 3) // Up
+        {
+          for(int r = bottom ; r >= top ; r--)
+          {
+            ans.push_back(matrix[ r ][left] );
+          }
+          left++;
+        }
+        direction = (direction + 1) % 4;
+       }
+      return ans;
+    }
+};
+/*
+  
+                         [1,    2,   3,  4,    5],
+                         [6,    7,   8,  9,   10],
+                         [11,  12,  13,  14,  15],
+                         [16,  17,  18,  19,  20]
+   m*n
+   1st iteration
+    1st loop right  col : [0 + k][0 + k] to   [0][n-1-k]
+    2nd loop down   row : [1+k][n-1-k] to [m-1-k][n-k-1] 
+    3rd loop left   col : [m-1-k][n-2-k] to [m-1-k][0+k]
+    4th loop up     row : [m-1-k][0+k]  to  [1+k][0+k]
+  
+*/
