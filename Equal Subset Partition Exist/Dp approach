@@ -2,22 +2,33 @@ class Solution {
 public:
     bool canPartition(vector<int>& nums) {
         sort(nums.begin(),nums.end());
-        int sum = accumulate(nums.begin(),nums.end(),0);
-        if(sum%2) return false;
+        int Total_sum = accumulate(nums.begin(),nums.end(),0);
+        // According to the question
+        if(Total_sum%2) return false;
+        else if(Total_sum == 0) return true;
+        
         int n = nums.size();
-        int dp[sum/2 + 1][n+1];
-        if(sum==0) return true;                 // Base Case
-        for(int i=0;i<=n;i++) dp[0][i] = 1;     // Sum = 0 can be achieved by using any no of elements
-        for(int i=1;i<=sum/2;i++) dp[i][0] = 0; // Sum > 0 can't be achieved by using positive no of elements
-        for(int s = 1; s <= sum/2 ; s++)
+        // Max Possible sum of each subset = Total_sum/2
+        bool dp[Total_sum/2 + 1][n+1];
+        // Always a possible way to get sum of subset = 0
+        for(int i=0;i<=n;i++)
+            dp[0][i] = 1;
+        // Always not a way to get Positive sum without using any elements
+        for(int sum = 1; sum <= Total_sum/2 ; sum++) 
+            dp[sum][0] = 0;
+        
+        for(int sum = 1; sum <= Total_sum/2 ; sum++)
         {
             for(int ind = 1; ind <= n; ind++)
             {
-                dp[s][ind] = dp[s][ind-1];       // Initialize with sum s possible using ind-1 elements
-                if(s>=nums[ind-1])        
-                    dp[s][ind] = dp[s][ind] || dp[s-nums[ind-1]][ind-1]; // By including the nums[ind-1]
+                // Without including the nums[ind-1]
+                dp[sum][ind] = dp[sum][ind-1];
+                if(sum >= nums[ind-1])
+                    dp[sum][ind] = dp[sum][ind] || dp[sum-nums[ind-1]][ind-1];
+                // If possible to get sum - nums[ind-1]
+                // then we can get sum using nums[ind-1]
             }
         }
-        return dp[sum/2][n];
+        return dp[Total_sum/2][n];
     }
 };
