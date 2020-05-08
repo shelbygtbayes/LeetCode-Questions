@@ -1,0 +1,20 @@
+// We can lso use formula to check for every x --> func(x) == y
+// where func = ( ((y2-y1)/(x2-x1))*x + y1 )
+// or simply like below
+class Solution {
+public:
+    
+    bool checkStraightLine(vector<vector<int>>& coordinates) {
+        
+        if(coordinates.size() == 2) return 1;
+        float s = (coordinates[1][1] - coordinates[0][1])/((float)(coordinates[1][0] - coordinates[0][0]));
+        for(int p2 = 2 ; p2 < coordinates.size() - 1; p2++)
+        {
+                int p1 = 0;
+                float s1 = (coordinates[p2][1] - coordinates[p1][1])/((float)(coordinates[p2][0] - coordinates[p1][0]));
+                if(s1 != s)
+                    return false;
+        }
+        return 1;
+    }
+};
