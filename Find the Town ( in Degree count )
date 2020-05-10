@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int findJudge(int N, vector<vector<int>>& trust) {
+        vector<int> adjList_size(N+1,0);
+        vector<int> parent(N+1,-1);
+        for(auto d_edge : trust)
+        {
+            int u = d_edge[0] , v = d_edge[1];
+            adjList_size[v]++;
+            parent[u] = v;
+        }
+        for(int node = 1 ; node <= N ; node++)
+        {
+            if(adjList_size[node] == N-1 and parent[node] == -1)
+                return node;
+        }
+        return -1;
+    }
+};
