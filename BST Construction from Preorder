@@ -1,5 +1,50 @@
 // Approach 1 O(n) Using stack
-// To be check
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+
+        TreeNode* root = new TreeNode(preorder[0]);
+        if(preorder.size() == 1)
+            return root;
+        
+        stack<TreeNode*> st;
+        st.push(root);
+        
+        for(int index = 1 ; index < preorder.size() ; index++)
+        {
+           TreeNode* r = st.top();
+           if(r->val > preorder[index])
+           {
+               r->left = new TreeNode(preorder[index]);
+               st.push(r->left);
+           }
+           else
+           {
+               TreeNode* prev_top = NULL;
+               while(!st.empty() and (st.top())->val < preorder[index])
+               {
+                   prev_top = st.top();
+                   st.pop();
+               }
+               if(prev_top)
+               {
+                   prev_top->right = new TreeNode(preorder[index]);
+                   st.push(prev_top->right);
+               }
+           }
+        }
+        return root;
+    }
+};
 // Approach2 O(n) Using min-max values 
 /**
  * Definition for a binary tree node.
